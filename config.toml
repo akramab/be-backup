@@ -1,5 +1,5 @@
 [api]
-host = "http://localhost"
+host = "https://be.mistardev.site"
 rest_port = 80
 
 [app_info]
