@@ -61,7 +61,7 @@ type GetInfrastructureTypetListResponse struct {
 
 type InfrastructureSubTypeData struct {
 	ID      int    `json:"id"`
-	Name    string `json:"name"`
+	Name    string `json:"sub_type"`
 	IconURL string `json:"icon_url"`
 }
 
