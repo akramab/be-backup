@@ -50,6 +50,7 @@ func New(
 		r.Get("/", infrastructureHandler.GetAllInfrastructureList)
 		r.Post("/", infrastructureHandler.CreateInfrastructure)
 		r.Get("/type", infrastructureTypeHandler.GetInfrastructureTypeList)
+		r.Get("/filter/data", infrastructureTypeHandler.GetInfrastructureSubTypeFilterData)
 
 		r.Get("/{infrastructure_type_id}/sub", infrastructureTypeHandler.GetInfrastructureSubTypeList)
 	})

@@ -10,6 +10,7 @@ import (
 type InfrastructureTypeHandler interface {
 	GetInfrastructureTypeList(w http.ResponseWriter, r *http.Request)
 	GetInfrastructureSubTypeList(w http.ResponseWriter, r *http.Request)
+	GetInfrastructureSubTypeFilterData(w http.ResponseWriter, r *http.Request)
 }
 
 type infrastructureTypeHandler struct {

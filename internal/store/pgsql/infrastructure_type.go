@@ -158,3 +158,51 @@ func (r *InfrastructureType) FindAllInfrastructureTypePagination(ctx context.Con
 
 	return infrastructureTypeList, nil
 }
+
+const infrastructureSubTypeFindFilterDataQuery = `SELECT ist.id, ist.name, COUNT(i.name)  
+	FROM infrastructure i 
+	RIGHT JOIN infrastructure_sub_type ist 
+	ON i.sub_type_id = ist.id 
+`
+
+func (s *InfrastructureType) FindInfrastructureSubTypeFilterData(ctx context.Context, subTypeIdList []int) ([]*store.InfrastructureSubTypeFilterData, error) {
+	infrastructureSubTypeFilterDataList := []*store.InfrastructureSubTypeFilterData{}
+
+	query := infrastructureSubTypeFindFilterDataQuery
+
+	if len(subTypeIdList) != 0 {
+		queryString := ""
+		for idx, id := range subTypeIdList {
+			if idx == 0 {
+				queryString = queryString + fmt.Sprintf(`%d`, id)
+			} else {
+				queryString = queryString + fmt.Sprintf(`,%d`, id)
+			}
+		}
+		query = query + fmt.Sprintf(`WHERE ist.id in (%s)`, queryString)
+	}
+
+	query = query + `GROUP BY ist.name, ist.id
+	ORDER BY ist.id asc`
+
+	rows, err := s.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		infrastructureSubTypeFilterData := &store.InfrastructureSubTypeFilterData{}
+		err := rows.Scan(
+			&infrastructureSubTypeFilterData.ID,
+			&infrastructureSubTypeFilterData.SubTypeName,
+			&infrastructureSubTypeFilterData.InfrastructureCount,
+		)
+		if err != nil {
+			return nil, err
+		}
+		infrastructureSubTypeFilterDataList = append(infrastructureSubTypeFilterDataList, infrastructureSubTypeFilterData)
+	}
+
+	return infrastructureSubTypeFilterDataList, nil
+}

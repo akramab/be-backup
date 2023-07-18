@@ -15,7 +15,14 @@ type InfrastructureTypeDataDetail struct {
 	SubType  InfrastructureSubTypeData
 }
 
+type InfrastructureSubTypeFilterData struct {
+	ID                  int
+	SubTypeName         string
+	InfrastructureCount int
+}
+
 type InfrastructureType interface {
 	FindAllInfrastructureType(ctx context.Context, typeID int, typeName string, subTypeName string) ([]*InfrastructureTypeDataDetail, error)
 	FindAllInfrastructureTypePagination(ctx context.Context, offset int, limit int, typeID int, typeName string, subTypeName string) ([]*InfrastructureTypeDataDetail, error)
+	FindInfrastructureSubTypeFilterData(ctx context.Context, subTypeIdList []int) ([]*InfrastructureSubTypeFilterData, error)
 }
