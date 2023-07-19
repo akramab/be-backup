@@ -5,6 +5,9 @@ import (
 	apierror "mistar-be-go/internal/rest/error"
 	"mistar-be-go/internal/rest/response"
 	"net/http"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type InfrastructureServiceScope struct {
@@ -61,7 +64,7 @@ func (handler *userHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	resp := LoginResponse{
 		Message: "Welcome back",
-		Name:    userData.Name,
+		Name:    cases.Title(language.Und, cases.NoLower).String(userData.Name),
 		Token:   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM4OTliZTBmLWQ5NmItNDliMi05N2EzLTdhOTdlMjQ4NTRlNSIsImVtYWlsIjoidGVzdC1lbWFpbDJAbWFpbC5jb20iLCJpYXQiOjE2ODk3Mzc2NTh9.EHl8V8YrEyGk4idXiCDO2k3Q_rWR-PikfIAUXtIjLyY",
 		Email:   userData.Email,
 	}
