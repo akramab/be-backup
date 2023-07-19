@@ -5,6 +5,7 @@ import (
 	"mistar-be-go/internal/config"
 	infrastructurehandler "mistar-be-go/internal/rest/handler/infrastructure"
 	infrastructuretypehandler "mistar-be-go/internal/rest/handler/infrastructure_type"
+	userhandler "mistar-be-go/internal/rest/handler/user"
 	"mistar-be-go/internal/rest/middleware"
 	storepgsql "mistar-be-go/internal/store/pgsql"
 	"net/http"
@@ -38,9 +39,11 @@ func New(
 
 	infrastructureTypeStore := storepgsql.NewInfrastructureType(sqlDB)
 	infrastructureStore := storepgsql.NewInfrastructure(sqlDB)
+	userStore := storepgsql.NewUser(sqlDB)
 
 	infrastructureTypeHandler := infrastructuretypehandler.NewInfrastructureTypeHandler(sqlDB, infrastructureTypeStore, cfg.API)
 	infrastructureHandler := infrastructurehandler.NewInfrastructureHandler(sqlDB, infrastructureStore, infrastructureTypeStore, cfg.API)
+	userHandler := userhandler.NewUserHandler(sqlDB, userStore, cfg.API)
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Mistar Backend APIs"))
@@ -54,6 +57,11 @@ func New(
 		r.Get("/filter/data", infrastructureTypeHandler.GetInfrastructureSubTypeFilterData)
 
 		r.Get("/{infrastructure_type_id}/sub", infrastructureTypeHandler.GetInfrastructureSubTypeList)
+	})
+
+	r.Route("/user", func(r chi.Router) {
+		r.Post("/register", userHandler.RegisterUser)
+		r.Post("/login", userHandler.LoginUser)
 	})
 
 	// STATIC FILE SERVE (FOR DEVELOPMENT PURPOSE ONLY)
