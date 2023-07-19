@@ -33,6 +33,7 @@ type LoginRequest struct {
 
 type LoginResponse struct {
 	Message string `json:"message"`
+	Name    string `json:"name"`
 	Token   string `json:"token"`
 	Email   string `json:"email"`
 }
@@ -60,6 +61,7 @@ func (handler *userHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	resp := LoginResponse{
 		Message: "Welcome back",
+		Name:    userData.Name,
 		Token:   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjM4OTliZTBmLWQ5NmItNDliMi05N2EzLTdhOTdlMjQ4NTRlNSIsImVtYWlsIjoidGVzdC1lbWFpbDJAbWFpbC5jb20iLCJpYXQiOjE2ODk3Mzc2NTh9.EHl8V8YrEyGk4idXiCDO2k3Q_rWR-PikfIAUXtIjLyY",
 		Email:   userData.Email,
 	}
